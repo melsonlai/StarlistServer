@@ -4,7 +4,7 @@ This is the back end of Starlist Web App, which includes:
 
 # Todo
 ## Accomplish a TodoItem
-+ Method: POST
++ Method: PUT
 + Query: `/todos/${TodoItem.props.id}/?accomplish=1`
 + Body: None
 + Return: `{"id": ${TodoItem.props.id}}`
@@ -37,7 +37,7 @@ This is the back end of Starlist Web App, which includes:
 	```
 
 ## Edit a TodoItem
-+ Method: POST
++ Method: PUT
 + Query: `/todos/${TodoItem.props.id}`
 + Body
 	```
