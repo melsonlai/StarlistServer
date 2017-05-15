@@ -20,6 +20,17 @@ router.post("/todos", function(req, res, next) {
 	}
 });
 
+// Create a TodoItem
+router.post("/todos", function(req, res, next) => {
+	const {title, content, deadline, importance, starID} = req.body;
+	if (!title || !content || !deadline || !importance || !starID) next();
+	else {
+		todoModel.create(title, content, deadline, importance, starID).then(todo => {
+			res.json(todo);
+		}).catch(next);
+	}
+});
+
 // List
 router.get('/posts', function(req, res, next) {
     const {searchText, start} = req.query;
