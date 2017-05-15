@@ -7,14 +7,34 @@ if (!global.db) {
 function accomplish(id) {
 	const sql = "
 		UPDATE todos
-		SET doneTs = extract(epoch from now())
-		WHERE id = $1
-		RETURNING id
+		SET \"doneTs\" = extract(epoch from now())
+		WHERE id = $1#
+		RETURNING id;
 	";
 
 	return db.one(sql, id);
 }
 
+// Create a TodoItem
+function create(title, content, deadline, importance, starID) {
+    const sql = "
+        INSERT INTO todos ($<this:name>)
+        VALUES ($<title>, $<content>, $<deadline>, $<importance>, $<starID>)
+        RETURNING *;
+    ";
+    return db.one(sql, {title, content, deadline, importance, starID});
+}
+
+// Edit a TodoItem
+function update(id, title, content, deadline, importance, starID) {
+	const sql = "
+		UPDATE todos
+		SET title = $<title~>, content = $<content~>, deadline = $<deadline#>, importance = $<importance#>, \"starID\" = $<starID#>
+		WHERE id = $<id>
+		RETURNING *;
+	";
+	return db.one(sql, {id, title, content, deadline, importance, starID});
+}
 
 function list(searchText = '', start) {
     const where = [];
@@ -32,14 +52,6 @@ function list(searchText = '', start) {
     return db.any(sql, [searchText, start]);
 }
 
-function create(mood, text) {
-    const sql = `
-        INSERT INTO posts ($<this:name>)
-        VALUES ($<mood>, $<text>)
-        RETURNING *
-    `;
-    return db.one(sql, {mood, text});
-}
 
 module.exports = {
     list,
