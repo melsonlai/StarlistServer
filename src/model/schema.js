@@ -18,7 +18,7 @@ const schemaSql = `
         title			text NOT NULL,
 		content			text DEFAULT NULL,
 		deadline		bigint NOT NULL,
-		importance		tinyint NOT NULL,
+		importance		smallint NOT NULL,
 		"starID"		bigint NOT NULL DEFAULT -1,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
 		"doneTs"		bigint DEFAULT NULL
@@ -34,9 +34,9 @@ const dataSql = `
     SELECT
         'title' || i,
         'content' || i,
-		round(RAND() + 1),
-        round(extract(epoch from now()) + (i + 1000000) * 3600.0)
-    FROM generate_series(1, 1000000) AS s(i);
+        round(extract(epoch from now()) + (i + 100) * 3600.0),
+		round(random() + 1)
+    FROM generate_series(1, 100) AS s(i);
 `;
 
 db.none(schemaSql).then(() => {
