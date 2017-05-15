@@ -52,6 +52,14 @@ router.delete("/todos/:id", function(req, res, next) {
 	}).catch(next);
 });
 
+// List a TodoItem
+router.get("/todos/:id", function(req, res, next) {
+	const id = req.params.id;
+	todoModel.listSingle(id).then(todo => {
+		res.json(todo);
+	}).catch(next);
+});
+
 // List
 router.get('/posts', function(req, res, next) {
     const {searchText, start} = req.query;
