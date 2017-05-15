@@ -16,12 +16,12 @@ const schemaSql = `
     CREATE TABLE todos (
         id				serial PRIMARY KEY NOT NULL,
         title			text NOT NULL,
-		content			text,
+		content			text DEFAULT NULL,
 		deadline		bigint NOT NULL,
-		importance		tinyint,
+		importance		tinyint NOT NULL,
 		"starID"		bigint NOT NULL DEFAULT -1,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
-		"doneTs"		bigint
+		"doneTs"		bigint DEFAULT NULL
     );
     CREATE INDEX todos_idx_deadline ON todos USING btree(deadline);
     -- CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);

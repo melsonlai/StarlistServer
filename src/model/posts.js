@@ -36,18 +36,40 @@ function update(id, title, content, deadline, importance, starID) {
 	return db.one(sql, {id, title, content, deadline, importance, starID});
 }
 
-function list(searchText = '', start) {
+// Delete a TodoItem
+function delete(id) {
+	const sql = "
+		DELETE FROM todos
+		WHERE id = $1#
+		RETURNING id
+	";
+	return db.one(sql, id);
+}
+
+// List a TodoItem
+function listSingle(id) {
+	const sql = "
+		SELECT * FROM todos
+		WHERE id = $1#;
+	";
+	return db.one(sql, id);
+}
+
+// List TodoItems
+function list10(searchText = '', unaccomplishedOnly = false, start) {
     const where = [];
     if (searchText)
         where.push(`text ILIKE '%$1:value%'`);
     if (start)
         where.push('id < $2');
+	if (unaccomplishedOnly)
+		where.push("\"doneTs\" IS NULL");
     const sql = `
         SELECT *
         FROM posts
         ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
-        ORDER BY id DESC
-        LIMIT 10
+        ORDER BY deadline DESC
+        LIMIT 10;
     `;
     return db.any(sql, [searchText, start]);
 }
