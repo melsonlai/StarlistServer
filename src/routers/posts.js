@@ -37,7 +37,7 @@ router.post("/todos", function(req, res, next) {
 	const {title, content, deadline, importance, starID} = req.body;
 	if (!id || !title || !content || !deadline || !importance || !starID) next();
 	else {
-		todoModel.update(title, content, deadline, importance, starID).then(todo => {
+		todoModel.update(id, title, content, deadline, importance, starID).then(todo => {
 			res.json(todo);
 		}).catch(next);
 	}
