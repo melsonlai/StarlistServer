@@ -15,8 +15,8 @@ router.post("/todos/:id", function(req, res, next) {
 	const accomplish = req.query.accomplish;
 	if (accomplish !== "1") next();
 	else {
-		todoModel.accomplish(id).then(delID => {
-			res.json(delID);
+		todoModel.accomplish(id).then(accID => {
+			res.json(accID);
 		}).catch(next);
 	}
 });
@@ -36,12 +36,20 @@ router.post("/todos", function(req, res, next) => {
 router.post("/todos/:id", function(req, res, next) {
 	const id = req.params.id;
 	const {title, content, deadline, importance, starID} = req.body;
-	if (!id || !title || !content || !deadline || !importance || !starID) next();
+	if (!title || !content || !deadline || !importance || !starID) next();
 	else {
 		todoModel.update(id, title, content, deadline, importance, starID).then(todo => {
 			res.json(todo);
 		}).catch(next);
 	}
+});
+
+// Delete a TodoItem
+router.delete("/todos/:id", function(req, res, next) {
+	const id = req.params.id;
+	todoModel.delete(id).then(delID => {
+		res.json(delID);
+	}).catch(next);
 });
 
 // List
