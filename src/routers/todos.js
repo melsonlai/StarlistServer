@@ -35,7 +35,7 @@ router.put("/todos/:id", function(req, res, next) {
 });
 
 // Create a TodoItem
-router.post("/todos", function(req, res, next) => {
+router.post("/todos", function(req, res, next) {
 	const {title, content, deadline, importance, starID} = req.body;
 	if (!title || !content || !deadline || !importance || !starID) {
 		const err = new Error("Missing body of POST to /todos");
@@ -51,7 +51,7 @@ router.post("/todos", function(req, res, next) => {
 // Delete a TodoItem
 router.delete("/todos/:id", function(req, res, next) {
 	const id = req.params.id;
-	todoModel.delete(id).then(delID => {
+	todoModel.del(id).then(delID => {
 		res.json(delID);
 	}).catch(next);
 });

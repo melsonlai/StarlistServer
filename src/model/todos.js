@@ -5,53 +5,53 @@ if (!global.db) {
 
 // Accomplish a TodoItem
 function accomplish(id) {
-	const sql = "
+	const sql = `
 		UPDATE todos
 		SET \"doneTs\" = extract(epoch from now())
 		WHERE id = $1#
 		RETURNING id;
-	";
+	`;
 
 	return db.one(sql, id);
 }
 
 // Create a TodoItem
 function create(title, content, deadline, importance, starID) {
-    const sql = "
+    const sql = `
         INSERT INTO todos ($<this:name>)
         VALUES ($<title>, $<content>, $<deadline>, $<importance>, $<starID>)
         RETURNING *;
-    ";
+    `;
     return db.one(sql, {title, content, deadline, importance, starID});
 }
 
 // Edit a TodoItem
 function update(id, title, content, deadline, importance, starID) {
-	const sql = "
+	const sql = `
 		UPDATE todos
 		SET title = $<title~>, content = $<content~>, deadline = $<deadline#>, importance = $<importance#>, \"starID\" = $<starID#>
 		WHERE id = $<id>
 		RETURNING *;
-	";
+	`;
 	return db.one(sql, {id, title, content, deadline, importance, starID});
 }
 
 // Delete a TodoItem
-function delete(id) {
-	const sql = "
+function del(id) {
+	const sql = `
 		DELETE FROM todos
 		WHERE id = $1#
 		RETURNING id
-	";
+	`;
 	return db.one(sql, id);
 }
 
 // List a TodoItem
 function listSingle(id) {
-	const sql = "
+	const sql = `
 		SELECT * FROM todos
 		WHERE id = $1#;
-	";
+	`;
 	return db.one(sql, id);
 }
 
@@ -80,7 +80,7 @@ module.exports = {
 	accomplish,
 	create,
 	update,
-	delete,
+	del,
 	listSingle,
     list10
 };
