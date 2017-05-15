@@ -7,45 +7,35 @@ const schemaSql = `
     CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
     -- Drop (droppable only when no dependency)
-    DROP INDEX IF EXISTS posts_idx_text;
-    DROP INDEX IF EXISTS posts_idx_ts;
-    DROP TABLE IF EXISTS posts;
-    DROP TYPE IF EXISTS mood;
+    DROP INDEX IF EXISTS todos_idx_title;
+	DROP INDEX IF EXISTS todos_idx_content;
+    DROP INDEX IF EXISTS todos_idx_deadline;
+    DROP TABLE IF EXISTS todos;
 
     -- Create
-    CREATE TYPE mood AS ENUM (
-        'Clear',
-        'Clouds',
-        'Drizzle',
-        'Rain',
-        'Thunder',
-        'Snow',
-        'Windy'
-    );
-    CREATE TABLE posts (
-        id              serial PRIMARY KEY NOT NULL,
-        mood            mood NOT NULL,
-        text            text NOT NULL,
+    CREATE TABLE todos (
+        id				serial PRIMARY KEY NOT NULL,
+        title			text NOT NULL,
+		content			text,
+		deadline		bigint NOT NULL,
+		importance		tinyint,
+		"starID"		bigint NOT NULL DEFAULT -1,
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
-        "clearVotes"    integer NOT NULL DEFAULT 0,
-        "cloudsVotes"   integer NOT NULL DEFAULT 0,
-        "drizzleVotes"  integer NOT NULL DEFAULT 0,
-        "rainVotes"     integer NOT NULL DEFAULT 0,
-        "thunderVotes"  integer NOT NULL DEFAULT 0,
-        "snowVotes"     integer NOT NULL DEFAULT 0,
-        "windyVotes"    integer NOT NULL DEFAULT 0
+		doneTs			bigint
     );
-    CREATE INDEX posts_idx_ts ON posts USING btree(ts);
-    CREATE INDEX posts_idx_text ON posts USING gin(text gin_trgm_ops);
+    CREATE INDEX todos_idx_deadline ON todos USING btree(deadline);
+    -- CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);
+	-- CREATE INDEX todos_idx_content ON todos USING gin(content gin_trgm_ops);
 `;
 
 const dataSql = `
     -- Populate dummy posts
-    INSERT INTO posts (mood, text, ts)
+    INSERT INTO todos (title, content, deadline, importance)
     SELECT
-        'Clear',
-        'word' || i || ' word' || (i+1) || ' word' || (i+2),
-        round(extract(epoch from now()) + (i - 1000000) * 3600.0)
+        'title' || i,
+        'content' || i,
+		round(RAND() + 1), 
+        round(extract(epoch from now()) + (i + 1000000) * 3600.0)
     FROM generate_series(1, 1000000) AS s(i);
 `;
 
