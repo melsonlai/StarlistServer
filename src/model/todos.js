@@ -29,7 +29,7 @@ function create(title, content, deadline, importance, starID) {
 function update(id, title, content, deadline, importance, starID) {
 	const sql = `
 		UPDATE todos
-		SET title = $<title~>, content = $<content~>, deadline = $<deadline#>, importance = $<importance#>, \"starID\" = $<starID#>
+		SET title = $<title#>, content = $<content#>, deadline = $<deadline#>, importance = $<importance#>, \"starID\" = $<starID#>
 		WHERE id = $<id>
 		RETURNING *;
 	`;
