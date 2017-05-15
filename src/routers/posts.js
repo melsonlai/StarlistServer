@@ -10,6 +10,7 @@ router.use(bodyParser.json());
 router.use(accessController); // Allows cross-origin HTTP requests
 
 // Accomplish a TodoItem
+// Edit a TodoItem
 router.put("/todos/:id", function(req, res, next) {
 	const id = req.params.id;
 	const accomplish = req.query.accomplish;
@@ -19,26 +20,29 @@ router.put("/todos/:id", function(req, res, next) {
 			res.json(accID);
 		}).catch(next);
 	}
-});
-
-// Create a TodoItem
-router.post("/todos", function(req, res, next) => {
+}, function(req, res, next) {
+	const id = req.params.id;
 	const {title, content, deadline, importance, starID} = req.body;
-	if (!title || !content || !deadline || !importance || !starID) next();
-	else {
-		todoModel.create(title, content, deadline, importance, starID).then(todo => {
+	if (!title || !content || !deadline || !importance || !starID) {
+		const err = new Error("Wrong arguments of PUT to /todos/id");
+		err.status = 400;
+		throw err;
+	} else {
+		todoModel.update(id, title, content, deadline, importance, starID).then(todo => {
 			res.json(todo);
 		}).catch(next);
 	}
 });
 
-// Edit a TodoItem
-router.put("/todos/:id", function(req, res, next) {
-	const id = req.params.id;
+// Create a TodoItem
+router.post("/todos", function(req, res, next) => {
 	const {title, content, deadline, importance, starID} = req.body;
-	if (!title || !content || !deadline || !importance || !starID) next();
-	else {
-		todoModel.update(id, title, content, deadline, importance, starID).then(todo => {
+	if (!title || !content || !deadline || !importance || !starID) {
+		const err = new Error("Missing body of POST to /todos");
+		err.status = 400;
+		throw err;
+	} else {
+		todoModel.create(title, content, deadline, importance, starID).then(todo => {
 			res.json(todo);
 		}).catch(next);
 	}
