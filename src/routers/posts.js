@@ -2,13 +2,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const accessController = require('../middleware/access-controller.js');
 
-const postModel = require('../model/posts.js');
-const voteModel = require('../model/votes.js');
+const todoModel = require('../model/todos.js');
 
 const router = express.Router();
 
 router.use(bodyParser.json());
 router.use(accessController); // Allows cross-origin HTTP requests
+
+// Accomplish a TodoItem
+router.post("/todos", function(req, res, next) {
+	const id = req.query.accomplish;
+	if (!id) next();
+	else {
+		todoModel.accomplish(id).then(delID => {
+			res.json(delID);
+		}).catch(next);
+	}
+});
 
 // List
 router.get('/posts', function(req, res, next) {
