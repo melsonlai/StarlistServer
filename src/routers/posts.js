@@ -31,6 +31,18 @@ router.post("/todos", function(req, res, next) => {
 	}
 });
 
+// Edit a TodoItem
+router.post("/todos", function(req, res, next) {
+	const id = req.query.id;
+	const {title, content, deadline, importance, starID} = req.body;
+	if (!id || !title || !content || !deadline || !importance || !starID) next();
+	else {
+		todoModel.update(title, content, deadline, importance, starID).then(todo => {
+			res.json(todo);
+		}).catch(next);
+	}
+});
+
 // List
 router.get('/posts', function(req, res, next) {
     const {searchText, start} = req.query;
