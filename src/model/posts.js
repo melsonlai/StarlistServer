@@ -3,6 +3,19 @@ if (!global.db) {
     db = pgp(process.env.DB_URL);
 }
 
+// Accomplish a TodoItem
+function accomplish(id) {
+	const sql = "
+		UPDATE todos
+		SET doneTs = extract(epoch from now())
+		WHERE id = $1
+		RETURNING id
+	";
+
+	return db.one(sql, id);
+}
+
+
 function list(searchText = '', start) {
     const where = [];
     if (searchText)
