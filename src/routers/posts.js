@@ -60,6 +60,14 @@ router.get("/todos/:id", function(req, res, next) {
 	}).catch(next);
 });
 
+// List TodoItems
+router.get("/todos", function(req, res, next) {
+	const {searchText, unaccomplishedOnly, start} = req.query;
+	todoModel.list10(searchText, unaccomplishedOnly, start).then(todo => {
+		res.json(todo);
+	}).catch(next);
+});
+
 // List
 router.get('/posts', function(req, res, next) {
     const {searchText, start} = req.query;
