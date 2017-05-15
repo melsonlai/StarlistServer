@@ -10,7 +10,7 @@ router.use(bodyParser.json());
 router.use(accessController); // Allows cross-origin HTTP requests
 
 // Accomplish a TodoItem
-router.post("/todos/:id", function(req, res, next) {
+router.put("/todos/:id", function(req, res, next) {
 	const id = req.params.id;
 	const accomplish = req.query.accomplish;
 	if (accomplish !== "1") next();
@@ -33,7 +33,7 @@ router.post("/todos", function(req, res, next) => {
 });
 
 // Edit a TodoItem
-router.post("/todos/:id", function(req, res, next) {
+router.put("/todos/:id", function(req, res, next) {
 	const id = req.params.id;
 	const {title, content, deadline, importance, starID} = req.body;
 	if (!title || !content || !deadline || !importance || !starID) next();
