@@ -63,12 +63,12 @@ function list10(searchText = '', unaccomplishedOnly = false, start) {
 		where.push(`content ILIKE '%$1:value%'`);
 	}
     if (start)
-        where.push('id < $2');
+        where.push('deadline < $2');
 	if (unaccomplishedOnly)
 		where.push("\"doneTs\" IS NULL");
     const sql = `
         SELECT *
-        FROM posts
+        FROM todos
         ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
         ORDER BY deadline DESC
         LIMIT 10;
