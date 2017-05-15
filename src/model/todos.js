@@ -58,8 +58,10 @@ function listSingle(id) {
 // List TodoItems
 function list10(searchText = '', unaccomplishedOnly = false, start) {
     const where = [];
-    if (searchText)
-        where.push(`text ILIKE '%$1:value%'`);
+    if (searchText) {
+        where.push(`title ILIKE '%$1:value%'`);
+		where.push(`content ILIKE '%$1:value%'`);
+	}
     if (start)
         where.push('id < $2');
 	if (unaccomplishedOnly)
@@ -74,8 +76,11 @@ function list10(searchText = '', unaccomplishedOnly = false, start) {
     return db.any(sql, [searchText, start]);
 }
 
-
 module.exports = {
-    list,
-    create
+	accomplish,
+	create,
+	update,
+	delete,
+	listSingle,
+    list10
 };

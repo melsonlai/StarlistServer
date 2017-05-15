@@ -24,8 +24,8 @@ const schemaSql = `
 		"doneTs"		bigint DEFAULT NULL
     );
     CREATE INDEX todos_idx_deadline ON todos USING btree(deadline);
-    -- CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);
-	-- CREATE INDEX todos_idx_content ON todos USING gin(content gin_trgm_ops);
+    CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);
+	CREATE INDEX todos_idx_content ON todos USING gin(content gin_trgm_ops);
 `;
 
 const dataSql = `
