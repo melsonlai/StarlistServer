@@ -12,16 +12,37 @@ const schemaSql = `
     DROP INDEX IF EXISTS todos_idx_deadline;
     DROP TABLE IF EXISTS todos;
 
+	DROP TABLE IF EXISTS stars;
+
+	DROP TABLE IF EXISTS users;
+
     -- Create
+	CREATE TABLE users (
+		id				serial PRIMARY KEY NOT NULL,
+		ts				bigint NOT NULL DEFAULT (extract(epoch from now()))
+	);
+
+	CREATE TABLE stars (
+		"dbID"			serial PRIMARY KEY NOT NULL,
+		"starID"		text DEFAULT NULL,
+		const			text DEFAULT NULL,
+		"IAUName"		text DEFAULT NULL,
+		designation		text DEFAULT NULL,
+		ra				real NOT NULL,
+		dec				real NOT NULL,
+		vmag			real NOT NULL
+	);
+
     CREATE TABLE todos (
         id				serial PRIMARY KEY NOT NULL,
         title			text NOT NULL,
 		content			text DEFAULT NULL,
 		deadline		bigint NOT NULL,
 		importance		smallint NOT NULL,
-		"starID"		bigint NOT NULL DEFAULT -1,
+		"starID"		integer REFERENCES stars ("dbID"),
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
-		"doneTs"		bigint DEFAULT NULL
+		"doneTs"		bigint DEFAULT NULL,
+		"userID"		integer REFERENCES users (id)
     );
     CREATE INDEX todos_idx_deadline ON todos USING btree(deadline);
     CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);
@@ -29,13 +50,30 @@ const schemaSql = `
 `;
 
 const dataSql = `
-    -- Populate dummy posts
-    INSERT INTO todos (title, content, deadline, importance)
+    -- Populate dummy data
+	INSERT INTO users (ts)
+	SELECT round(extract(epoch from now()) + (i + 100) * 3600.0)
+	FROM generate_series(1, 100) AS s(i);
+
+	INSERT INTO stars ("starID", const, "IAUName", designation, ra, dec, vmag)
+	SELECT
+		random()::text,
+		random()::text,
+		random()::text,
+		random()::text,
+		random() * 359 - 180,
+		random() * 179 - 90,
+		random() * 7 - 1
+	FROM generate_series(1, 100) AS s(i);
+
+    INSERT INTO todos (title, content, deadline, importance, "starID", "userID")
     SELECT
         'title' || i,
         'content' || i,
         round(extract(epoch from now()) + (i + 100) * 3600.0),
-		round(random() + 1)
+		round(random() + 1),
+		round(random() * 98 + 1),
+		round(random() * 98 + 1)
     FROM generate_series(1, 100) AS s(i);
 `;
 
