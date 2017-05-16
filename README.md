@@ -163,6 +163,27 @@ This is the back end of Starlist Web App, which includes:
 + Dec: -16.716116
 + Vmag: -1.44
 
+### API
+#### Get User Stars
++ Method: GET
++ Query: `/stars/${TodoItem.props.userID}`
++ Body: None
++ Return
+	```
+	[
+		{
+			"dbID",
+			"starID",
+			const,
+			"IAUName",
+			designation,
+			ra,
+			dec,
+			vmag, 
+		}, ...
+	]
+	```
+
 ## User
 ### Request New User
 + Method: POST
