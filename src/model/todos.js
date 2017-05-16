@@ -15,14 +15,25 @@ function accomplish(id, userID) {
 	return db.one(sql, [id, userID]);
 }
 
+const STAR_NUM = 100;
+const IMPORTANCE_LEV = 2;
+
 // Create a TodoItem
 function create(title, content, deadline, importance, userID) {
+	/*const selectStarSql = `
+		SELECT "dbID" from stars
+		ORDER BY vmag ASC
+		OFFSET floor((${STAR_NUM} / ${IMPORTANCE_LEV}) * (random() + ($1# - 1)))
+		LIMIT 1;
+	`;
+	db.one(selectStarSql, importance);*/
     const sql = `
         INSERT INTO todos ($<this:name>)
-        VALUES ($<title>, $<content>, $<deadline>, $<importance>, $<userID>)
+        VALUES ($<title>, $<content>, $<deadline>, $<importance>, $<starID>, $<userID>)
         RETURNING *;
     `;
-    return db.one(sql, {title, content, deadline, importance, userID});
+	const starID = Math.floor(Math.random() * 100);
+    return db.one(sql, {title, content, deadline, importance, starID, userID});
 }
 
 // Edit a TodoItem
