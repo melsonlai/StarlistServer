@@ -5,6 +5,7 @@ const db = pgp(process.env.DB_URL);
 const schemaSql = `
     -- Extensions
     CREATE EXTENSION IF NOT EXISTS pg_trgm;
+	CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
     -- Drop (droppable only when no dependency)
     DROP INDEX IF EXISTS todos_idx_title;
@@ -18,7 +19,7 @@ const schemaSql = `
 
     -- Create
 	CREATE TABLE users (
-		id				serial PRIMARY KEY NOT NULL,
+		id				uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
 		ts				bigint NOT NULL DEFAULT (extract(epoch from now()))
 	);
 
@@ -34,7 +35,7 @@ const schemaSql = `
 	);
 
     CREATE TABLE todos (
-        id				serial PRIMARY KEY NOT NULL,
+        id				uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
         title			text NOT NULL,
 		content			text DEFAULT NULL,
 		deadline		bigint NOT NULL,
@@ -42,7 +43,7 @@ const schemaSql = `
 		"starID"		integer REFERENCES stars ("dbID"),
         ts              bigint NOT NULL DEFAULT (extract(epoch from now())),
 		"doneTs"		bigint DEFAULT NULL,
-		"userID"		integer REFERENCES users (id)
+		"userID"		uuid REFERENCES users (id)
     );
     CREATE INDEX todos_idx_deadline ON todos USING btree(deadline);
     CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);
@@ -68,13 +69,13 @@ const dataSql = `
 
     INSERT INTO todos (title, content, deadline, importance, "starID", "userID")
     SELECT
-        'title' || i,
-        'content' || i,
-        round(extract(epoch from now()) + (i + 100) * 3600.0),
+        'title' || s.i,
+        'content' || s.i,
+        round(extract(epoch from now()) + (s.i + 100) * 3600.0),
 		round(random() + 1),
 		round(random() * 98 + 1),
-		round(random() * 98 + 1)
-    FROM generate_series(1, 100) AS s(i);
+		users.id
+    FROM generate_series(1, 100) AS s(i), users;
 `;
 
 db.none(schemaSql).then(() => {
