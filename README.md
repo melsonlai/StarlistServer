@@ -6,7 +6,7 @@ This is the back end of Starlist Web App, which includes:
 ### Accomplish a TodoItem
 + Method: PUT
 + Query: `/todos/${TodoItem.props.id}?accomplish=1`
-+ Body: None
++ Body: `{"userID": ${TodoItem.props.userID}}`
 + Return: `{"id": ${TodoItem.props.id}}`
 
 ### Create a TodoItem
@@ -19,7 +19,7 @@ This is the back end of Starlist Web App, which includes:
 		"content": ${TodoItem.props.content},
 		"deadline": ${TodoItem.props.deadline},
 		"importance": ${TodoItem.props.importance},
-		"starID": ${TodoItem.props.starID},
+		"userID": ${TodoItem.props.userID}
 	}
 	```
 + Return
@@ -32,7 +32,8 @@ This is the back end of Starlist Web App, which includes:
 		"importance": ${TodoItem.props.importance},
 		"starID": ${TodoItem.props.starID},
 		"ts": ${TodoItem.props.ts},
-		"doneTs": ${TodoItem.props.doneTs}
+		"doneTs": ${TodoItem.props.doneTs},
+		"userID": ${TodoItem.props.userID}
 	}
 	```
 
@@ -47,6 +48,7 @@ This is the back end of Starlist Web App, which includes:
 		"deadline": ${TodoItem.props.deadline},
 		"importance": ${TodoItem.props.importance},
 		"starID": ${TodoItem.props.starID},
+		"userID": ${TodoItem.props.userID}
 	}
 	```
 + Return
@@ -59,7 +61,8 @@ This is the back end of Starlist Web App, which includes:
 		"importance": ${TodoItem.props.importance},
 		"starID": ${TodoItem.props.starID},
 		"ts": ${TodoItem.props.ts},
-		"doneTs": ${TodoItem.props.doneTs}
+		"doneTs": ${TodoItem.props.doneTs},
+		"userID": ${TodoItem.props.userID}
 	}
 	```
 
@@ -67,13 +70,13 @@ This is the back end of Starlist Web App, which includes:
 ### Delete a TodoItem
 + Method: DELETE
 + Query: `/todos/${TodoItem.props.id}`
-+ Body: None
++ Body: `{"userID": ${TodoItem.props.userID}}`
 + Return: `{"id": ${TodoItem.props.id}}`
 
 ### List a TodoItem
 + Method: GET
 + Query: `/todos/${TodoItem.props.id}`
-+ Body: None
++ Body: `{"userID": ${TodoItem.props.userID}}`
 + Return
 	```
 	{
@@ -84,7 +87,8 @@ This is the back end of Starlist Web App, which includes:
 		"importance": ${TodoItem.props.importance},
 		"starID": ${TodoItem.props.starID},
 		"ts": ${TodoItem.props.ts},
-		"doneTs": ${TodoItem.props.doneTs}
+		"doneTs": ${TodoItem.props.doneTs},
+		"userID": ${TodoItem.props.userID}
 	}
 	```
 
@@ -92,7 +96,7 @@ This is the back end of Starlist Web App, which includes:
 + Method: GET
 + Query: `/todos?start=${TodoItem.props.deadline}`
 + Optional Query: `searchText=${searchText}`, `unaccomplishedOnly=${0, 1}`
-+ Body: None
++ Body: `{"userID": ${TodoItem.props.userID}}`
 + Return
 	```
 	[
