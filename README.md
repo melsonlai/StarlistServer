@@ -5,21 +5,20 @@ This is the back end of Starlist Web App, which includes:
 ## Todo
 ### Accomplish a TodoItem
 + Method: PUT
-+ Query: `/todos/${TodoItem.props.id}?accomplish=1`
-+ Body: `{"userID": ${TodoItem.props.userID}}`
++ Query: `/todos/${TodoItem.props.userID}/${TodoItem.props.id}?accomplish=1`
++ Body: None
 + Return: `{"id": ${TodoItem.props.id}}`
 
 ### Create a TodoItem
 + Method: POST
-+ Query: `/todos`
++ Query: `/todos/${TodoItem.props.userID}`
 + Body
 	```
 	{
 		"title": ${TodoItem.props.title},
 		"content": ${TodoItem.props.content},
 		"deadline": ${TodoItem.props.deadline},
-		"importance": ${TodoItem.props.importance},
-		"userID": ${TodoItem.props.userID}
+		"importance": ${TodoItem.props.importance}
 	}
 	```
 + Return
@@ -39,16 +38,14 @@ This is the back end of Starlist Web App, which includes:
 
 ### Edit a TodoItem
 + Method: PUT
-+ Query: `/todos/${TodoItem.props.id}`
++ Query: `/todos/${TodoItem.props.userID}/${TodoItem.props.id}`
 + Body
 	```
 	{
 		"title": ${TodoItem.props.title},
 		"content": ${TodoItem.props.content},
 		"deadline": ${TodoItem.props.deadline},
-		"importance": ${TodoItem.props.importance},
-		"starID": ${TodoItem.props.starID},
-		"userID": ${TodoItem.props.userID}
+		"importance": ${TodoItem.props.importance}
 	}
 	```
 + Return
@@ -69,14 +66,14 @@ This is the back end of Starlist Web App, which includes:
 
 ### Delete a TodoItem
 + Method: DELETE
-+ Query: `/todos/${TodoItem.props.id}`
-+ Body: `{"userID": ${TodoItem.props.userID}}`
++ Query: `/todos/${TodoItem.props.userID}/${TodoItem.props.id}`
++ Body: None
 + Return: `{"id": ${TodoItem.props.id}}`
 
 ### List a TodoItem
 + Method: GET
-+ Query: `/todos/${TodoItem.props.id}`
-+ Body: `{"userID": ${TodoItem.props.userID}}`
++ Query: `/todos/${TodoItem.props.userID}/${TodoItem.props.id}`
++ Body: None
 + Return
 	```
 	{
@@ -94,9 +91,9 @@ This is the back end of Starlist Web App, which includes:
 
 ### List TodoItems
 + Method: GET
-+ Query: `/todos?start=${TodoItem.props.deadline}`
++ Query: `/todos/${TodoItem.props.userID}?start=${TodoItem.props.deadline}`
 + Optional Query: `searchText=${searchText}`, `unaccomplishedOnly=${0, 1}`
-+ Body: `{"userID": ${TodoItem.props.userID}}`
++ Body: None
 + Return
 	```
 	[

@@ -11,63 +11,65 @@ router.use(accessController); // Allows cross-origin HTTP requests
 
 // Accomplish a TodoItem
 // Edit a TodoItem
-router.put("/todos/:id", function(req, res, next) {
-	const id = req.params.id;
+router.put("/todos/:userID/:id", function(req, res, next) {
+	const {userID, id} = req.params;
 	const accomplish = req.query.accomplish;
 	if (accomplish !== "1") next();
 	else {
-		todoModel.accomplish(id).then(accID => {
+		todoModel.accomplish(id, userID).then(accID => {
 			res.json(accID);
 		}).catch(next);
 	}
 }, function(req, res, next) {
-	const id = req.params.id;
-	const {title, content, deadline, importance, starID} = req.body;
-	if (!title || !content || !deadline || !importance || !starID) {
+	const {userID, id} = req.params;
+	const {title, content, deadline, importance} = req.body;
+	if (!title || !content || !deadline || !importance) {
 		const err = new Error("Wrong arguments of PUT to /todos/id");
 		err.status = 400;
 		throw err;
 	} else {
-		todoModel.update(id, title, content, deadline, importance, starID).then(todo => {
+		todoModel.update(id, title, content, deadline, importance, userID).then(todo => {
 			res.json(todo);
 		}).catch(next);
 	}
 });
 
 // Create a TodoItem
-router.post("/todos", function(req, res, next) {
-	const {title, content, deadline, importance, starID} = req.body;
-	if (!title || !content || !deadline || !importance || !starID) {
+router.post("/todos/:userID", function(req, res, next) {
+	const {title, content, deadline, importance} = req.body;
+	const {userID} = req.params;
+	if (!title || !content || !deadline || !importance) {
 		const err = new Error("Missing body of POST to /todos");
 		err.status = 400;
 		throw err;
 	} else {
-		todoModel.create(title, content, deadline, importance, starID).then(todo => {
+		todoModel.create(title, content, deadline, importance, userID).then(todo => {
 			res.json(todo);
 		}).catch(next);
 	}
 });
 
 // Delete a TodoItem
-router.delete("/todos/:id", function(req, res, next) {
-	const id = req.params.id;
-	todoModel.del(id).then(delID => {
+router.delete("/todos/:userID/:id", function(req, res, next) {
+	const {userID, id} = req.params;
+	todoModel.del(id, userID).then(delID => {
 		res.json(delID);
 	}).catch(next);
 });
 
 // List a TodoItem
-router.get("/todos/:id", function(req, res, next) {
-	const id = req.params.id;
-	todoModel.listSingle(id).then(todo => {
+router.get("/todos/:userID/:id", function(req, res, next) {
+	const {userID, id} = req.params;
+	todoModel.listSingle(id, userID).then(todo => {
 		res.json(todo);
 	}).catch(next);
 });
 
 // List TodoItems
-router.get("/todos", function(req, res, next) {
+router.get("/todos/:userID", function(req, res, next) {
 	const {searchText, unaccomplishedOnly, start} = req.query;
-	todoModel.list10(searchText, unaccomplishedOnly, start).then(todo => {
+	const {userID} = req.params;
+	todoModel.list10(searchText, unaccomplishedOnly, start, userID).then(todo => {
 		res.json(todo);
 	}).catch(next);
 });
