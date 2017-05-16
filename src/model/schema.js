@@ -64,8 +64,8 @@ const dataSql = `
 		random()::text,
 		random()::text,
 		random()::text,
-		random() * 359 - 180,
-		random() * 179 - 90,
+		random() * 86400,
+		random() * 180 - 90,
 		random() * 7 - 1
 	FROM generate_series(1, 100) AS s(i);
 
