@@ -69,12 +69,12 @@ const dataSql = `
 
     INSERT INTO todos (title, content, deadline, importance, "starID", "userID")
     SELECT
-        'title' || s.i,
-        'content' || s.i,
-        round(extract(epoch from now()) + (s.i + 100) * 3600.0),
+        'title' || i,
+        'content' || i,
+        round(extract(epoch from now()) + (i + 100) * 3600.0),
 		round(random() + 1),
 		round(random() * 98 + 1),
-		users.id
+		id
     FROM generate_series(1, 100) AS s(i), users;
 `;
 

@@ -7,8 +7,12 @@ if (!global.db) {
 function newUser() {
 	const sql = `
 		INSERT INTO users (ts)
-		VALUE(extract(epoch from now()))
+		VALUES (extract(epoch from now()))
 		RETURNING id;
 	`;
 	return db.one(sql);
+}
+
+module.exports = {
+	newUser
 }
