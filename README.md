@@ -161,3 +161,10 @@ This is the back end of Starlist Web App, which includes:
 + RA: 101.287155
 + Dec: -16.716116
 + Vmag: -1.44
+
+## User
+### Request New User
++ Method: POST
++ Query: `/users`
++ Body: None
++ Return: `{"id": ${User.props.id}}`
