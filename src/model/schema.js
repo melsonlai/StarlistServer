@@ -11,6 +11,7 @@ const schemaSql = `
     DROP INDEX IF EXISTS todos_idx_title;
 	DROP INDEX IF EXISTS todos_idx_content;
     DROP INDEX IF EXISTS todos_idx_deadline;
+	DROP INDEX IF EXISTS todos_idx_userid;
     DROP TABLE IF EXISTS todos;
 
 	DROP TABLE IF EXISTS stars;
@@ -46,6 +47,7 @@ const schemaSql = `
 		"userID"		uuid REFERENCES users (id)
     );
     CREATE INDEX todos_idx_deadline ON todos USING btree(deadline);
+	CREATE INDEX todos_idx_userid ON todos USING btree("userID");
     CREATE INDEX todos_idx_title ON todos USING gin(title gin_trgm_ops);
 	CREATE INDEX todos_idx_content ON todos USING gin(content gin_trgm_ops);
 `;
@@ -74,7 +76,7 @@ const dataSql = `
         round(extract(epoch from now()) + (i + 100) * 3600.0),
 		round(random() + 1),
 		round(random() * 98 + 1),
-		id
+		users.id
     FROM generate_series(1, 100) AS s(i), users;
 `;
 

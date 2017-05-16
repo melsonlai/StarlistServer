@@ -7,7 +7,8 @@ if (!global.db) {
 function listUserStars(userID) {
 	const sql = `
 		SELECT DISTINCT ON (stars."dbID") stars.*
-		FROM stars INNER JOIN todos ON todos."userID" = \'$1#\';
+		FROM stars INNER JOIN todos ON todos."userID" = \'$1#\'
+		WHERE todos."doneTs" IS NOT NULL;
 	`;
 	return db.any(sql, userID);
 }
