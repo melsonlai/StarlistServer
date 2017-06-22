@@ -14,9 +14,9 @@ router.use(accessController); // Allows cross-origin HTTP requests
 router.put("/todos/:userID/:id", function(req, res, next) {
 	const {userID, id} = req.params;
 	const accomplish = req.query.accomplish;
-	if (accomplish !== "1") next();
+	if (accomplish !== "1" && accomplish !== "0") next();
 	else {
-		todoModel.accomplish(id, userID).then(accID => {
+		todoModel.accomplish(id, accomplish, userID).then(accID => {
 			res.json(accID);
 		}).catch(next);
 	}

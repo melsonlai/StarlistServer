@@ -4,14 +4,13 @@ if (!global.db) {
 }
 
 // Accomplish a TodoItem
-function accomplish(id, userID) {
+function accomplish(id, accomplish, userID) {
 	const sql = `
 		UPDATE todos
-		SET \"doneTs\" = extract(epoch from now())
+		SET \"doneTs\" = ${accomplish === "1" ? "extract(epoch from now())" : "NULL"}
 		WHERE id = \'$1#\' AND \"userID\" = \'$2#\'
 		RETURNING id;
 	`;
-
 	return db.one(sql, [id, userID]);
 }
 
@@ -40,7 +39,7 @@ function create(title, content, deadline, importance, userID) {
 function update(id, title, content, deadline, importance, userID) {
 	const sql = `
 		UPDATE todos
-		SET title = $<title#>, content = $<content#>, deadline = $<deadline#>, importance = $<importance#>
+		SET title = $<title>, content = $<content>, deadline = $<deadline>, importance = $<importance>
 		WHERE id = $<id> AND \"userID\" = $<userID>
 		RETURNING *;
 	`;

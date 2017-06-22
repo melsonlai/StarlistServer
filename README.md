@@ -5,7 +5,7 @@ This is the back end of Starlist Web App, which includes:
 ## Todo
 ### Accomplish a TodoItem
 + Method: PUT
-+ Query: `/todos/${TodoItem.props.userID}/${TodoItem.props.id}?accomplish=1`
++ Query: `/todos/${TodoItem.props.userID}/${TodoItem.props.id}?accomplish=${1, 0}`
 + Body: None
 + Return: `{"id": ${TodoItem.props.id}}`
 
