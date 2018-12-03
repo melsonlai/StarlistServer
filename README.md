@@ -1,4 +1,4 @@
-# Starlist_Server
+# starlist-server
 
 This is the back end of Starlist Web App, which includes:
 
